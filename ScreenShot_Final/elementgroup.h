@@ -21,8 +21,9 @@ class TextElement
 public:
     //构造函数
     TextElement(){}
-    TextElement(const QPen &recPen,const QPen &textPen,const int &textFont)
-        :m_recPen(recPen),m_textPen(textPen),m_font(textFont)
+
+    TextElement(const QPen &recPen,const QPen &textPen,const int &textFont,const QString &text)
+        :m_text(text),m_recPen(recPen),m_textPen(textPen),m_font(textFont)
     {}
 
     //矩形区域的起始点

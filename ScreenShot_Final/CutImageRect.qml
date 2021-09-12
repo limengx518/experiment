@@ -6,7 +6,6 @@ Item {
     property alias borderWidth: cutborder.width
     property alias borderHeight: cutborder.height
 
-    //改变剪切后图片的样式
     function cut(){
         content2.rectX=-cutrect.x
         content2.rectY=-cutrect.y

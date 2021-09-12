@@ -32,8 +32,6 @@ RecCapture::RecCapture(QWidget *parent)
     , m_isMousePress(false)
     , m_currentCaptureState(InitCapture)
 {
-
-
     pixs=new QVector<QPixmap>;
     curtimes = new QVector<QString>;
     m_filename = "/tmp/Cut/";
@@ -290,6 +288,8 @@ void RecCapture::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Escape){
         //退出截图
         close();
+
+        emit signalNull();
     }
 
     // Eeter键完成矩形区域截图;
@@ -326,6 +326,7 @@ void RecCapture::keyPressEvent(QKeyEvent *event)
             if(!filedir->exists(m_filename)){
                 //判断文件夹是否存在，若不存在则将自己创建
                 filedir->mkdir(m_filename);
+                qDebug()<<"创建文件夹成功";
             }
             for(int i=0;i<pixs->length();i++){
                 //将保存的矩形截图依次保存在指定文件夹
@@ -337,31 +338,7 @@ void RecCapture::keyPressEvent(QKeyEvent *event)
 
             emit signalCompleteContinue();
         }
-
         close();
-    }
-
-    //Tab进行钉图操作
-    if(event->key() == Qt::Key_Tab){
-
-        labelimage=new MyLabel();
-
-        if(!m_capturePixmap.toImage().isNull()){
-            qDebug()<<"所截的图不是空的!!";
-            qDebug()<<"宽："<<m_capturePixmap.width()<<"高："<<m_capturePixmap.height();
-        }
-        labelimage->setimagetolabel(m_capturePixmap);
-        labelimage->setFixedSize(m_capturePixmap.width(),m_capturePixmap.height());
-
-        //钉在桌面
-        labelimage->show();
-
-        //清空画布
-        update();
-        //重新定义当前截取图片的状态
-        m_currentCaptureState = InitCapture;
-
-        emit signalCompleteNail();
     }
 }
 

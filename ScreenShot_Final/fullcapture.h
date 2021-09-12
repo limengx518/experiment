@@ -7,7 +7,7 @@
 #include <QMainWindow>
 #include "imageprovider.h"
 #include "reccapture.h"
-#include "longcapture.h"
+
 
 class FullCapture:public QMainWindow
 {
@@ -37,7 +37,6 @@ public slots:
     void cutRecScreen(QPixmap pixmap);
     void cutContinueScreen();
     void cutNailScreen();
-    void cutLongScreen();
 
     void startActiveCapture();
     void startFullScreen();
@@ -48,7 +47,6 @@ public slots:
 private:
     QImage m_img;
     RecCapture *m_recCapture;
-    LongCapture *m_longCapture;
 };
 
 #endif // FULLCAPTURE_H

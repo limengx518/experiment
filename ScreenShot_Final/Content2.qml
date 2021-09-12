@@ -1,4 +1,4 @@
- import QtQuick 2.15
+import QtQuick 2.15
 import QtQuick.Controls 1.4 as QQC
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.3
@@ -11,10 +11,10 @@ Item {
     property alias paint1: paint
 
     //设置画笔颜色，画笔粗细
-    property var painterColor: "red"
+    property string painterColor: "red"
 
     //设置文字颜色，文字粗细
-    property var textpaintColor: "black"
+    property string textpaintColor: "black"
 
     //设置剪切后的图片位置
     property int rectX: 0
@@ -55,7 +55,6 @@ Item {
 
     //左边编辑栏
     Column {
-
         id: leftside
 
         height: parent.height
@@ -354,6 +353,23 @@ Item {
                     id: textedit
                     x: paint.printPoint.x
                     y: paint.printPoint.y
+                    focus: true
+                    //设置键盘事件
+                    Keys.onPressed: {
+                        if(event.modifiers===Qt.ControlModifier&&event.key===Qt.Key_Z){
+                            console.log("ctrl+z键盘事件被触发")
+                            isCut = paint.isdoCut()
+                            paint.undo()
+                            if (isCut) {
+                                backImg(paint.undo_backRect("undo"))
+                            }
+                        }else{
+                            event.accepted=false
+                        }
+                    }
+
+                    //                    height: paint.rectLength
+                    //将其设置为paint.textEdit的原因是避免上次编辑造成的影响
                     text: paint.textEdit
                     font.pixelSize: paint.textFont
                     color: textpaintColor
@@ -365,22 +381,22 @@ Item {
                             paint.settextEdit(textedit.text)
                             textedit.visible = true
                         }
+                        console.log("qml中文字区域的长度是："+textedit.width)
                     }
                     //当字体颜色改变时
                     onColorChanged: {
-                        if (paint.flag == 1) {
+                        if (paint.flag === 1) {
                             paint.setTextColor(color)
                         }
                     }
                     //当字体的大小改变时
                     onFontChanged: {
-                        if (paint.flag == 1) {
+                        if (paint.flag ===1) {
                             paint.setTextFont(textedit.font.pixelSize)
                         }
                     }
 
                     visible: false
-                    focus: true
                 }
 
                 //涂鸦类
@@ -411,7 +427,8 @@ Item {
 
             Connections {
                 target: fullCut
-                onCallImgChanged: {
+                function onCallImgChanged(){
+
                     img.source = ""
                     img.source = "image://screen"
 

@@ -31,5 +31,22 @@
         <file>icons/cut.png</file>
         <file>icons/line.png</file>
         <file>icons/clear.png</file>
+        <file>icons/edit.png</file>
+        <file>icons/help.png</file>
+        <file>icons/open.png</file>
+        <file>icons/print.png</file>
+        <file>icons/mail.png</file>
+        <file>icons/send.png</file>
+        <file>icons/clip.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/phone.png</file>
+        <file>icons/imgur.png</file>
+        <file>icons/document-save-as.png</file>
+        <file>icons/document-save.png</file>
+        <file>icons/saveas.png</file>
+        <file>icons/qq.png</file>
+        <file>icons/wexin.png</file>
+        <file>icons/logo.png</file>
     </qresource>
 </RCC>
+

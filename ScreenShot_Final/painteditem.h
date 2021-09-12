@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * 这个类负责c++与qml的各种交互
+=======
+ * 这个类负责c++与qml的各种涂鸦交互
+>>>>>>> 2c57aeab8c3494058f60af0f4080ec8ea435e3a8
  */
 
 #ifndef PAINTEDITEM_H
@@ -11,6 +15,8 @@
 #include <QLineF>
 #include <QPen>
 #include <QImage>
+
+#include <QFontMetrics>
 #include "elementgroup.h"
 
 class PaintedItem : public QQuickPaintedItem
@@ -27,9 +33,13 @@ class PaintedItem : public QQuickPaintedItem
     //画笔的宽度、画笔的颜色
     Q_PROPERTY(int penWidth READ penWidth WRITE setPenWidth NOTIFY penWidthChanged)
     Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor)
-    //文字的宽度、文字的颜色
+
+    //文字的大小、文字的颜色
     Q_PROPERTY(int textFont READ textFont WRITE setTextFont NOTIFY textFontChanged)
     Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged)
+
+    //文字所在矩形的宽度
+    Q_PROPERTY(int textWidth READ textWidth WRITE setTextWidth NOTIFY textWidthChanged)
 
     //矩形|椭圆形|直线的起始点与终止点
     Q_PROPERTY(QPoint startPoint READ startPoint WRITE setStartPoint NOTIFY startPointChanged)
@@ -90,6 +100,9 @@ class PaintedItem : public QQuickPaintedItem
 //    QRectF *m_rect;
 //    QVector<QRectF*> m_rects;
 
+    //文字区域的宽度
+    int m_textWidth;
+
     //当前所进行的编辑操作，1是文字，2是椭圆,3是矩形，4是直线,5是涂鸦
     int m_flag;
 
@@ -108,9 +121,10 @@ public:
     Q_INVOKABLE QRectF undo_backRect(QString flag);
     //如果是剪切操作向m_sequence里push_back(6),6表示剪切
     Q_INVOKABLE void pressCutSequence();
-    //查看m_sequence里的最后一个值，如果是6,返回bool值true,否则返回false
+    //查看m_sequence里的最后一个值，如果是6,返回bool值true,否则返回false。flag标志，“clear”表示清除，“undo”表示撤销，根据此进行特定的操作
     Q_INVOKABLE bool isdoCut(QString flag);
 
+    //彻底清除m_rects里面的矩形
     Q_INVOKABLE void destroyRect();
 
     //每次调用update()函数时就会调用paint函数进行画布的更新
@@ -142,7 +156,7 @@ public:
 
     int textWidth() const
     {
-        return m_textPen.width();
+        return m_textWidth;
     }
 
     QColor textColor() const
@@ -165,6 +179,8 @@ public:
         return m_textFont;
     }
 
+    void setTextWidth(int newTextWidth);
+
 signals:
     void clearSignal();
 
@@ -182,8 +198,6 @@ signals:
 
     void printPointChanged(QPoint printPoint);
 
-    void textWidthChanged(int textWidth);
-
     void textColorChanged(QColor textColor);
 
     void isFillChanged(bool isFill);
@@ -191,6 +205,8 @@ signals:
     void flagChanged(int flag);
 
     void textFontChanged(int textFont);
+
+    void textWidthChanged();
 
 public slots:
     void setEnabled(bool enabled){ m_bEnabled = enabled; }
@@ -227,19 +243,18 @@ public slots:
     {
         if (m_textEdit == textEdit)
             return;
-
-        if(m_flag==1){
-            m_textEdit = textEdit;
-            qDebug()<<"settextEdit";
-            emit textEditChanged();
-        }
+        m_textEdit = textEdit;
+        qDebug()<<"settextEdit";
+        emit textEditChanged();
     }
 
     void on_textEdit_changed(){
-        qDebug()<<"on_textEdit_changed:"<<&m_textElement;
+//        qDebug()<<"on_textEdit_changed:"<<&m_textElement;
         if(m_flag==1&&m_textElement!=nullptr){
+            //改变文字
             m_textElement->m_text=m_textEdit;
-            qDebug()<<m_textElement->m_text;
+
+            //update两次会发生什么报错？？
 //            update();
         }
     }
@@ -292,6 +307,7 @@ public slots:
     //当文字的粗细中途发生改变时
     void on_textFont_changed(int textFont)
     {
+        Q_UNUSED(textFont);
         if(m_flag==1&&m_textElement!=nullptr){
             m_textElement->m_font=m_textFont;
         }
@@ -328,7 +344,6 @@ protected:
     bool m_bEnabled;
     bool m_bPressed;
     bool m_bMoved;
-    //进行保存操作的指针
 };
 
 #endif // PAINTEDITEM_H

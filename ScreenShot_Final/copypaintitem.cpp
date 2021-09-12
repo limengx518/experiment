@@ -34,6 +34,7 @@ void CopyPaintItem::paint(QPainter *painter)
 
 void CopyPaintItem::paintEvent(QEvent *event)
 {
+    Q_UNUSED(event);
     saveTextElement(copyPainter);
     saveCircleElement(copyPainter);
     saveRectElement(copyPainter);

@@ -48,6 +48,8 @@ signals:
     void signalCompleteContinue();
     //通知钉图完成
     void signalCompleteNail();
+    //通知放弃截取图片
+    void signalNull();
 
 private:
     void initWindow();
@@ -62,7 +64,6 @@ private:
     QPoint getMovePoint();
     StretchRectState getStrethRectState(QPoint point);
     void setStretchCursorStyle(StretchRectState stretchRectState);
-
 
     void drawCaptureImage();
     void drawStretchRect();
@@ -105,7 +106,6 @@ private:
     QString m_filename;
     //当前时间
     QString strtime;
-
 
     MyLabel *labelimage;
 };

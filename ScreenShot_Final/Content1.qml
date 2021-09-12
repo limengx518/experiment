@@ -5,6 +5,14 @@ import QtQuick.Layouts 1.3
 Item {
     id: content
 
+    //暂时展示
+    signal tempDisplay()
+
+    onTempDisplay: {
+        console.log("信号处理")
+        img.source="file:///tmp/1.jpg"
+    }
+
     function selectImage(){
         img.source = arguments[0]
         console.log("来源是：" + img.source)
@@ -26,7 +34,7 @@ Item {
 
     Connections {
         target: fullCut
-        onCallImgChanged: {
+        function onCallImgChanged() {
             img.source = ""
             img.source = "image://screen"
         }
@@ -65,22 +73,22 @@ Item {
                     model: ListModel {
                         id: model
                         ListElement {
-                            text: "全屏"
+                            text: "全屏截取"
                         }
                         ListElement {
-                            text: "矩形区域"
-                        }
-                        ListElement {
-                            text: "活动窗口"
+                            text: "矩形截取"
                         }
                         ListElement{
-                            text:"连续截图"
+                            text: "不规则截取"
+                        }
+                        ListElement {
+                            text: "活动窗口截取"
+                        }
+                        ListElement{
+                            text:"连续截取"
                         }
                         ListElement{
                             text:"钉在桌面"
-                        }
-                        ListElement{
-                            text:"长截图"
                         }
                     }
                 }
@@ -144,7 +152,7 @@ Item {
             text: qsTr("截取屏幕")
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 30
-            iconName: "applications-system"
+            iconSource: "./icons/logo.png"
             onClicked: {
                 countDown.start()
             }
@@ -177,7 +185,7 @@ Item {
         onTriggered: {
             console.log(spinBox.value)
             spinBox.value -= 1
-            if(spinBox.value < 1 && cbb.currentText === "全屏"){
+            if(spinBox.value < 1 && cbb.currentText === "全屏截取"){
                 countDown.stop()
                 if(check_2.checked == true){
                     appRoot.hide()
@@ -187,7 +195,7 @@ Item {
                     fullCut.startFullScreen()
                 }
 
-            } else if (spinBox.value < 1 && cbb.currentText === "矩形区域") {
+            } else if (spinBox.value < 1 && cbb.currentText === "矩形截取") {
                 countDown.stop()
                 if(check_2.checked == true){
                     appRoot.hide()
@@ -195,7 +203,15 @@ Item {
                 }else{
                     fullCut.startRecCapture()
                 }
-            } else if (spinBox.value < 1 && cbb.currentText === "连续截图") {
+            }else if (spinBox.value < 1 && cbb.currentText === "不规则截取") {
+                countDown.stop()
+                if(check_2.checked == true){
+                    appRoot.hide()
+                    timer.setTimeout(function(){ fullCut.startFreeCapture() },500)
+                }else{
+                    fullCut.startFreeCapture()
+                }
+            }else if (spinBox.value < 1 && cbb.currentText === "连续截取") {
                 countDown.stop()
                 if(check_2.checked == true){
                     appRoot.hide()
@@ -211,23 +227,13 @@ Item {
                 }else{
                     fullCut.startNailCapture()
                 }
-            } else if(spinBox.value < 1 && cbb.currentText === "活动窗口"){
+            } else if(spinBox.value < 1 && cbb.currentText === "活动窗口截取"){
                 countDown.stop()
                 if(check_2.checked == true){
                     appRoot.hide()
-                    fullCut.delay(500)
-                    fullCut.startActiveCapture()
+                    timer.setTimeout(function(){ fullCut.startActiveCapture() },500)
                 }else{
                     fullCut.startActiveCapture()
-                }
-            }else if(spinBox.value < 1 && cbb.currentText === "长截图"){
-                countDown.stop()
-                if(check_2.checked == true){
-                    appRoot.hide()
-                    fullCut.delay(500)
-                    fullCut.cutLongScreen()
-                }else{
-                    fullCut.cutLongScreen()
                 }
             }
         }
@@ -235,7 +241,7 @@ Item {
 
     Connections {
         target: fullCut
-        onFinishCapture:{
+        function onFinishCapture(){
             appRoot.showNormal()
         }
     }

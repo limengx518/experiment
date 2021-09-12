@@ -4,7 +4,7 @@
 #include <QQuickView>
 #include <QQuickItem>
 
-#include "fullcapture.h"
+#include "capture.h"
 #include "painteditem.h"
 
 int main(int argc, char *argv[]){
@@ -17,7 +17,8 @@ int main(int argc, char *argv[]){
     QQmlApplicationEngine engine;
 
 
-    FullCapture *fullCut=new FullCapture();
+    Capture *fullCut=new Capture();
+
     engine.rootContext()->setContextProperty("fullCut",fullCut);
     engine.addImageProvider(QLatin1String("screen"),fullCut->imgProvider);
 

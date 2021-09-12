@@ -104,12 +104,6 @@ void FullCapture::cutNailScreen()
     emit finishCapture();
 }
 
-void FullCapture::cutLongScreen()
-{
-    m_longCapture=new LongCapture();
-    m_longCapture->show();
-}
-
 //开始矩形截图
 void FullCapture::startRecCapture()
 {
