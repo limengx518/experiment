@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 
 int main(void)
@@ -6,8 +5,7 @@ int main(void)
 	//我修改了版本三
 	printf("hello moon");
 	printf("My name is ShuZhen");
-	printf("my name is liangzhuzhen");
-	printf("hello hello\n");
+	printf("jjjjjjjj\n");
 
 	
 	return 1;
