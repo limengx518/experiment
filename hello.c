@@ -5,8 +5,8 @@
 int main(void)
 {
 	//我修改了版本三
-	printf("hello ");
-	printf("My name is MengxueLi");
+	printf("hello moon");
+	printf("My name is ShuZhen");
 
 	
 	return 1;
